@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>随机简谱音符生成器</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative; /* 设置body为相对定位 */
+        }
+        #result-container {
+            flex-grow: 1; /* 让结果容器占据剩余空间 */
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center;     /* 垂直居中 */
+        }
+        #result {
+            font-size: 2em;
+        }
+        .note {
+            position: relative;
+            display: inline-block;
+            color: green; /* 默认情况下所有音符都是绿色 */
+        }
+        .low-note::after,
+        .high-note::before {
+            content: ".";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .low-note::after {
+            bottom: -0.6em; /* 调整点的位置到数字下方 */
+        }
+        .high-note::before {
+            top: -1.2em; /* 调整点的位置到数字上方 */
+        }
+    </style>
+    <script type="text/javascript">
+        let intervalId;
+
+        function generateRandomNote() {
+            const notes = {
+                low: ['5', '6', '7'],
+                mid: ['1', '2', '3', '4', '5', '6', '7'],
+                high: ['1', '2', '3', '4', '5', '6']
+            };
+
+            // Randomly choose a category and then a note from that category
+            const categories = Object.keys(notes);
+            const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+            const randomNote = notes[randomCategory][Math.floor(Math.random() * notes[randomCategory].length)];
+
+            // Prepare the result text with appropriate class for styling
+            let resultText = `<span class="note ${randomCategory === 'low' ? 'low-note' : randomCategory === 'high' ? 'high-note' : ''}">${randomNote}</span>`;
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+
+        // Auto-generate on load and start the interval
+        window.onload = function() {
+            generateRandomNote(); // Generate the first note immediately
+            intervalId = setInterval(generateRandomNote, 1000); // Start generating new notes every second
+        };
+    </script>
+</head>
+<body>
+    <h1></h1>
+    <div id="result-container">
+        <p id="result"></p>
+    </div>
+</body>
+</html>
