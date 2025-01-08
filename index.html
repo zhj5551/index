@@ -1,67 +1,80 @@
-
 <!DOCTYPE html>
 <html>
- <head>
-  <meta charset="UTF-8">
-  <title>点击按钮随机点名</title>
-  <style type="text/css">  
-   #box {
-    margin: auto;
-    width: 1000px;
-    font-size: 166px;
-	height: 235px;
-    color: #ed1941;
-    text-align: center;
-    margin-top: 200px;
-   }   
-   #bt {
-    margin: auto;
-    width: 120px;
-	height: 90px;
-    text-align: center;
+<head>
+    <title>随机简谱音符生成器</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative; /* 设置body为相对定位 */
+        }
+        #result-container {
+            flex-grow: 1; /* 让结果容器占据剩余空间 */
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center;     /* 垂直居中 */
+        }
+        #result {
+            font-size: 2em;
+        }
+        .note {
+            position: relative;
+            display: inline-block;
+            color: green; /* 默认情况下所有音符都是绿色 */
+        }
+        .low-note::after,
+        .high-note::before {
+            content: ".";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .low-note::after {
+            bottom: -0.6em; /* 调整点的位置到数字下方 */
+        }
+        .high-note::before {
+            top: -1.2em; /* 调整点的位置到数字上方 */
+        }
+    </style>
+    <script type="text/javascript">
+        let intervalId;
 
-    margin-top: 75px;
-    color: #fff;
-    font-size: 30px;   // 设置字体大小
-    cursor: pointer;
-	display: flex;
-    align-items: center;
-    justify-content: space-around;
-    flex-direction: column;
-   }
-  </style>
-   <script type="text/javascript">
-   var namelist=[
-		"《小学教师专业标准（试行）中“专业知识”维度包括哪些领域？》",
-		"简述影响学生有意注意的因素？",
-		"简述家校合作的途径？"
-	];
-	 var mytime=null;
-	 
-	 function doit(){
-		 var bt=window.document.getElementById("bt");
-		 if(mytime==null){
-			  bt.innerHTML="停止";
-			  show();
-	 }
-	 else{
-		  bt.innerHTML="开始";
-		  clearTimeout(mytime);
-		  mytime=null;
-	 }
-	}
- 
-	 function show(){
-	 var box=window.document.getElementById("box");
-	 var num=Math.floor((Math.random()*100000))%namelist.length;
-	 box.innerHTML=namelist[num];
-	 mytime=setTimeout("show()",1);
-	 }
-   </script>
- </head>
- <!-- <body id="bodybj" style="background-color: green;"> -->
- <body id="bodybj" >
-  <div id="box">幸运666</div>
-  <div id="bt" onclick="doit()" style="background-color: green;" >点名</div>
- </body>
+        function generateRandomNote() {
+            const notes = {
+                low: ['5', '6', '7'],
+                mid: ['1', '2', '3', '4', '5', '6', '7'],
+                high: ['1', '2', '3', '4', '5', '6']
+            };
+
+            // Randomly choose a category and then a note from that category
+            const categories = Object.keys(notes);
+            const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+            const randomNote = notes[randomCategory][Math.floor(Math.random() * notes[randomCategory].length)];
+
+            // Prepare the result text with appropriate class for styling
+            let resultText = `<span class="note ${randomCategory === 'low' ? 'low-note' : randomCategory === 'high' ? 'high-note' : ''}">${randomNote}</span>`;
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+
+        // Auto-generate on load and start the interval
+        window.onload = function() {
+            generateRandomNote(); // Generate the first note immediately
+            intervalId = setInterval(generateRandomNote, 1000); // Start generating new notes every second
+        };
+    </script>
+</head>
+<body>
+    <h1></h1>
+    <div id="result-container">
+        <p id="result"></p>
+    </div>
+</body>
 </html>
