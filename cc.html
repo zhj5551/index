@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        // 定义要随机显示的文本数组
+        var texts = ["sc", "lc", "fc", "st"];
+        
+        // 获取页面元素引用
+        function getElement() {
+            return document.getElementById('randomText');
+        }
+        
+        // 随机选择一个文本并更新页面元素的内容
+        function updateText() {
+            var randomIndex = Math.floor(Math.random() * texts.length);
+            getElement().textContent = texts[randomIndex];
+        }
+        
+        // 页面加载完成后执行
+        window.onload = function() {
+            // 第一次立即显示随机文本
+            updateText();
+            // 设置定时器，每秒（1000毫秒）更新一次显示的文本
+            setInterval(updateText, 1000);
+        };
+    </script>
+</head>
+<body>
+    <h1>Random Text Display</h1>
+    <p id="randomText"></p> <!-- 显示随机文本的地方 -->
+</body>
+</html>
